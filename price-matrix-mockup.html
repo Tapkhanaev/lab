@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Лучшие предложения — прототип блока цен (1001tur)</title>
+<style>
+:root{
+  --teal:#2ec4c1; --teal-d:#1f9e9b; --teal-bg:#eafaf9; --teal-shadow:#2ec4c1e6;
+  --amber:#ffb61e; --amber-d:#d9821e;
+  --ink:#2b2b2b; --muted:#8d8d8d; --muted2:#6b7280; --line:#e7e9ea; --chip:#f1f2f3;
+  --green:#2e9e6f; --radius:15px;
+}
+*{box-sizing:border-box}
+body{font-family:Arial,Helvetica,sans-serif;color:var(--ink);margin:0;padding:24px;background:#f6f8f8}
+.pm{max-width:1100px;margin:0 auto}
+.pm-note{font-size:12px;color:var(--muted);margin:0 0 16px}
+/* search bar */
+.pm-search{display:flex;align-items:center;gap:0;background:#fff;border:1px solid var(--line);border-radius:999px;padding:6px 6px 6px 18px;margin:0 0 22px;overflow-x:auto;box-shadow:1px 1px 5px #2ec4c133}
+.pm-search .seg{display:flex;align-items:center;gap:7px;white-space:nowrap;cursor:pointer;font-size:14px;font-weight:500}
+.pm-search .seg .lbl{color:var(--muted);font-size:11px;font-weight:400}
+.pm-search .sep{width:1px;height:22px;background:var(--line);margin:0 16px;flex:0 0 auto}
+.pm-search .ic{width:16px;height:16px;color:var(--teal);flex:0 0 auto}
+.pm-search .find{margin-left:16px;background:var(--teal);color:#fff;border:none;border-radius:999px;padding:10px 20px;font-size:14px;font-weight:700;cursor:pointer;white-space:nowrap;display:flex;gap:7px;align-items:center}
+.pm-title{font-size:28px;font-weight:700;margin:0 0 8px}
+.pm-hint{font-size:12px;color:var(--muted);margin:0 0 14px}
+/* date strip */
+.pm-dates{display:flex;gap:10px;overflow-x:auto;padding:4px 2px 8px}
+.tad{min-width:120px;flex:0 0 auto;cursor:pointer;border:1px solid transparent;border-radius:var(--radius);padding:13px 12px;text-align:center;background:#fff;box-shadow:0 1px 5px #0003;position:relative}
+.tad.sel{border-color:var(--teal)}
+.tad .d{color:var(--muted);font-size:16px;font-weight:500}
+.tad .p{font-size:20px;font-weight:700;margin-top:4px}
+.tad .p.cheap{color:var(--amber)}
+.tad .tag{font-size:11px;color:var(--amber);margin-top:2px}
+.tad .tag.s{color:var(--teal)}
+/* refresh banner */
+.pm-refresh{display:none;align-items:center;justify-content:space-between;gap:12px;background:var(--teal-bg);border:1px solid var(--teal);border-radius:var(--radius);padding:10px 14px;margin:10px 0 0}
+.pm-refresh .t{font-size:13px;color:var(--teal-d)}
+.pm-refresh button{background:var(--teal);color:#fff;border:none;border-radius:999px;padding:8px 14px;font-size:13px;font-weight:700;cursor:pointer;white-space:nowrap}
+.pm-sep{border-top:1px solid var(--line);margin:18px 0 14px}
+/* filters */
+.pm-filters{display:flex;flex-wrap:wrap;gap:18px;align-items:flex-start;margin:0 0 22px}
+.pm-fgroup{display:flex;align-items:flex-start;gap:8px;flex-wrap:wrap}
+.pm-fgroup>.cap{font-size:13px;color:var(--muted);padding-top:9px}
+.chip{display:flex;flex-direction:column;align-items:flex-start;gap:1px;background:var(--chip);border:1px solid transparent;border-radius:25px;padding:6px 15px;font-size:14px;font-weight:500;color:#444;cursor:pointer;white-space:nowrap;line-height:1.25}
+.chip .sub{font-size:11px;font-weight:400;color:var(--muted)}
+.chip.on{background:var(--amber);color:#fff}
+.chip.on .sub{color:#fff;opacity:.9}
+.pm-hint-inline{font-size:11px;color:var(--muted);display:inline-flex;align-items:center;gap:5px;background:var(--chip);border-radius:999px;padding:5px 11px;align-self:center}
+.pm-h2{font-size:22px;font-weight:700;margin:0 0 14px}
+/* room card */
+.room{background:#fff;border-radius:var(--radius);box-shadow:1px 1px 5px var(--teal-shadow);margin:0 0 16px;overflow:hidden}
+.room.sold{opacity:.7;box-shadow:0 1px 5px #0003}
+.room-hd{display:flex;align-items:center;justify-content:space-between;padding:14px 16px;background:var(--teal-bg);cursor:pointer;gap:10px}
+.room-hd .l{display:flex;align-items:center;gap:9px;min-width:0}
+.room-hd .nm{font-size:16px;font-weight:700}
+.room-hd .bed{width:21px;height:21px;color:var(--teal);flex:0 0 auto}
+.room-hd .cnt{font-size:12px;color:var(--muted)}
+.room-hd .demo{font-size:10px;padding:2px 8px;border-radius:999px;background:#fff4dc;color:var(--amber-d)}
+.room-hd .soldb{font-size:10px;padding:2px 8px;border-radius:999px;background:#fdeaea;color:#c0392b}
+.room-hd .from{font-size:13px;color:var(--muted)}
+.room-hd .from b{color:var(--ink);font-size:15px}
+.chevr{width:14px;height:14px;color:var(--muted);transition:transform .2s;flex:0 0 auto}
+.chevr.open{transform:rotate(90deg)}
+/* matrix */
+.mwrap{padding:12px 16px 10px;position:relative}
+.scroller{overflow-x:auto}
+.grid{display:grid;gap:6px;align-items:stretch}
+.gh-corner{font-size:11px;color:var(--muted);padding:4px 6px;align-self:end}
+.gh-date{text-align:center;padding:5px 4px;border-radius:10px}
+.gh-date.cheap{background:#fff4dc}
+.gh-date .dd{font-size:14px;font-weight:700}
+.gh-date.cheap .dd{color:var(--amber-d)}
+.gh-date .wd{font-size:10px;color:var(--muted)}
+.gh-nights{font-size:13px;font-weight:700;padding:6px;display:flex;align-items:center}
+.cell{border:1px solid var(--line);border-radius:10px;padding:7px 9px;background:#fff}
+.cell-empty{border:1px dashed var(--line);border-radius:10px;background:transparent;display:flex;align-items:center;justify-content:center;font-size:11px;color:var(--muted);min-height:40px}
+.cell-sold{border:1px solid var(--line);border-radius:10px;background:var(--chip);display:flex;align-items:center;justify-content:center;gap:6px;font-size:12px;color:var(--muted);min-height:40px}
+.ln{display:flex;justify-content:space-between;gap:8px;align-items:flex-start}
+.ln+.ln{border-top:1px dashed var(--line);margin-top:4px;padding-top:4px}
+.ln .meal{font-size:11px;white-space:nowrap}
+.ln .ops{font-size:10px;color:var(--muted)}
+.ln .price{font-size:13px;font-weight:700}
+.ln .pnn{font-size:10px;color:var(--muted)}
+.ln .best .price,.ln .best.pnn{color:var(--amber-d)}
+.ln.so .price{text-decoration:line-through;color:var(--muted)}
+.ln.so{opacity:.65}
+.ln .right{text-align:right;white-space:nowrap}
+.scrollR{position:absolute;right:6px;top:54px;width:32px;height:32px;border-radius:50%;border:1px solid var(--teal);background:#fff;color:var(--teal);cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 1px 4px #0002}
+.mfoot{font-size:11px;color:var(--muted);margin-top:8px;display:flex;align-items:center;gap:6px}
+.lock{width:13px;height:13px;flex:0 0 auto}
+.lbl-base{color:var(--muted)} .lbl-bf{color:var(--teal)} .lbl-hb{color:var(--amber-d)} .lbl-ai{color:var(--green)}
+</style>
+</head>
+<body>
+<div class="pm">
+<p class="pm-note">Прототип переработанного блока цен в стилистике сайта (бирюзовый #2ec4c1, акцент #ffb61e, Arial). Deluxe — реальные данные отеля ISG Airport Hotel; Standard / Family / Superior — демо для показа разных номеров, питаний и распродажи.</p>
+
+<div class="pm-search">
+  <div class="seg"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 19h18M5 16l5-2 4-7 3 1-2 6 4-1"/></svg><span>Москва</span></div>
+  <span class="sep"></span>
+  <div class="seg"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 21V5l8-2v18M12 21V8l8 2v11M4 21h16"/></svg><span>ISG Airport Hotel 4★</span></div>
+  <span class="sep"></span>
+  <div class="seg" id="sfDate"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="17" rx="2"/><path d="M3 9h18M8 2v4M16 2v4"/></svg><span>13–20 июля</span></div>
+  <span class="sep"></span>
+  <div class="seg"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 13a8 8 0 1 1-7-8 6 6 0 0 0 7 8Z"/></svg><span>9–11 ночей</span></div>
+  <span class="sep"></span>
+  <div class="seg"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M5 21a7 7 0 0 1 14 0"/></svg><span>2 взр.</span></div>
+  <button class="find" onclick="doSearch()"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4-4"/></svg>Найти туры</button>
+</div>
+
+<h2 class="pm-title">Лучшие предложения</h2>
+<div class="pm-hint">Выберите дату вылета</div>
+<div class="pm-dates" id="dateStrip"></div>
+<div class="pm-refresh" id="refreshBanner"><span class="t" id="refreshTxt"></span><button onclick="doSearch()">Обновить поиск</button></div>
+
+<div class="pm-sep"></div>
+<div class="pm-filters">
+  <div class="pm-fgroup"><span class="cap">Питание:</span><span id="foodChips" style="display:flex;gap:8px;flex-wrap:wrap"></span></div>
+  <div class="pm-fgroup"><span class="cap">Оператор:</span><span id="opChips" style="display:flex;gap:8px;flex-wrap:wrap"></span></div>
+</div>
+
+<h2 class="pm-h2">Выберите номер</h2>
+<div id="groups"></div>
+</div>
+
+<script>
+const fmt=n=>n.toLocaleString('ru-RU');const BASE='Без питания';
+const MEAL=['Без питания','Завтрак','Полупансион','Всё включено'];
+const mealCls={'Без питания':'lbl-base','Завтрак':'lbl-bf','Полупансион':'lbl-hb','Всё включено':'lbl-ai'};
+const OPS=["Paks","OneTouch&Travel","Art-Tour"];const ABBR={'Paks':'Paks','OneTouch&Travel':'OT','Art-Tour':'AT'};
+const combos=[['Paks'],['OneTouch&Travel'],['Paks','Art-Tour'],['OneTouch&Travel','Art-Tour'],['Art-Tour']];
+const strip=[["13.07",129736,0],["14.07",88900,1],["15.07",133415,0],["16.07",121501,0],["17.07",134291,0],["18.07",110779,0],["19.07",119243,0],["20.07",110779,0]];
+const realBase=[{"i":"14.07","o":"23.07","wi":"Вт","n":9,"p":149725},{"i":"20.07","o":"29.07","wi":"Пн","n":9,"p":150059},{"i":"18.07","o":"27.07","wi":"Вс","n":9,"p":150059},{"i":"16.07","o":"25.07","wi":"Чт","n":9,"p":153563},{"i":"13.07","o":"22.07","wi":"Пн","n":9,"p":154562},{"i":"15.07","o":"24.07","wi":"Ср","n":9,"p":154562},{"i":"19.07","o":"28.07","wi":"Пн","n":9,"p":154562},{"i":"17.07","o":"26.07","wi":"Сб","n":9,"p":154614},{"i":"13.07","o":"23.07","wi":"Пн","n":10,"p":159463},{"i":"17.07","o":"27.07","wi":"Сб","n":10,"p":159520},{"i":"20.07","o":"30.07","wi":"Пн","n":10,"p":160220},{"i":"16.07","o":"26.07","wi":"Чт","n":10,"p":160220},{"i":"14.07","o":"24.07","wi":"Вт","n":10,"p":164075},{"i":"15.07","o":"25.07","wi":"Ср","n":10,"p":164299},{"i":"19.07","o":"29.07","wi":"Пн","n":10,"p":164299},{"i":"18.07","o":"28.07","wi":"Вс","n":10,"p":164776},{"i":"16.07","o":"27.07","wi":"Чт","n":11,"p":165827},{"i":"19.07","o":"30.07","wi":"Пн","n":11,"p":169681},{"i":"14.07","o":"25.07","wi":"Вт","n":11,"p":174035},{"i":"17.07","o":"28.07","wi":"Сб","n":11,"p":174035},{"i":"18.07","o":"29.07","wi":"Вс","n":11,"p":174035},{"i":"20.07","o":"31.07","wi":"Пн","n":11,"p":174937},{"i":"13.07","o":"24.07","wi":"Пн","n":11,"p":174937},{"i":"15.07","o":"26.07","wi":"Ср","n":11,"p":177466}];
+const bfast={"14.07|9":175723,"20.07|9":177040,"18.07|9":177040,"16.07|9":179565,"13.07|9":180560,"15.07|9":180560,"19.07|9":180560,"17.07|9":181595,"13.07|10":188349,"17.07|10":189479,"20.07|10":190180,"16.07|10":190180,"15.07|10":193186,"19.07|10":193186,"14.07|10":194034,"18.07|10":194735,"16.07|11":198764,"19.07|11":202619,"17.07|11":205810,"14.07|11":205810,"18.07|11":205810,"20.07|11":207875,"13.07|11":207875,"15.07|11":209241};
+const data=[];let idx=0;
+realBase.forEach(r=>{data.push({room:"Deluxe",f:BASE,ops:combos[idx%5],...r});const bf=bfast[r.i+'|'+r.n];if(bf)data.push({room:"Deluxe",f:"Завтрак",ops:combos[(idx+2)%5],i:r.i,o:r.o,wi:r.wi,n:r.n,p:bf});idx++;});
+function genDemo(room,delta,tiers,sold){let j=0;realBase.forEach(r=>{tiers.forEach(t=>{data.push({room,demo:1,f:t.f,ops:combos[(j+t.k)%5],i:r.i,o:r.o,wi:r.wi,n:r.n,p:r.p+delta+t.add*r.n,soldout:!!sold});});j++;});}
+genDemo("Standard",-23000,[{f:BASE,add:0,k:0},{f:"Завтрак",add:2889,k:2},{f:"Полупансион",add:4200,k:3},{f:"Всё включено",add:6500,k:1}]);
+genDemo("Family Room",48000,[{f:BASE,add:0,k:1},{f:"Завтрак",add:2889,k:3},{f:"Всё включено",add:6800,k:2}]);
+genDemo("Superior",92000,[{f:BASE,add:0,k:0},{f:"Завтрак",add:2889,k:2},{f:"Всё включено",add:6800,k:1}],true);
+const HOLES=new Set(['Deluxe|15.07|10','Deluxe|19.07|11','Standard|16.07|10','Standard|13.07|11','Family Room|17.07|11']);
+let DATA=data.filter(d=>!HOLES.has(d.room+'|'+d.i+'|'+d.n));
+const SOLD=new Set(['Deluxe|13.07|9','Deluxe|20.07|11','Standard|14.07|10']);
+DATA.forEach(d=>{if(SOLD.has(d.room+'|'+d.i+'|'+d.n))d.soldout=true;});
+const order={"Standard":0,"Deluxe":1,"Family Room":2,"Superior":3};
+const st={food:new Set(),op:new Set()};const openR=new Set();let inited=false,selDate=null;
+const $=id=>document.getElementById(id);
+const SVGchev='<svg class="chevr" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m9 6 6 6-6 6"/></svg>';
+const SVGlock='<svg class="lock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="11" width="16" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>';
+
+function opF(d){return !st.op.size||d.ops.some(o=>st.op.has(o));}
+function chip(set,v,name,sub){const a=set.has(v);return `<button class="chip${a?' on':''}" data-v="${v}"><span>${name}</span><span class="sub">${sub}</span></button>`;}
+function renderChips(){
+  const present=MEAL.filter(m=>DATA.some(d=>d.f===m));
+  $('foodChips').innerHTML=present.map(f=>{const r=DATA.filter(d=>d.f===f&&opF(d)&&!d.soldout);const m=r.length?Math.min(...r.map(d=>d.p)):null;return chip(st.food,f,f,m?'от '+fmt(m)+' ₽':'нет мест');}).join('');
+  $('opChips').innerHTML=OPS.map(o=>{const r=DATA.filter(d=>d.ops.includes(o)&&(!st.food.size||st.food.has(d.f))&&!d.soldout);const m=r.length?Math.min(...r.map(d=>d.p)):null;return chip(st.op,o,o,m?'от '+fmt(m)+' ₽':'нет мест');}).join('');
+  $('foodChips').querySelectorAll('button').forEach(b=>b.onclick=()=>tog(st.food,b.dataset.v));
+  $('opChips').querySelectorAll('button').forEach(b=>b.onclick=()=>tog(st.op,b.dataset.v));
+}
+function tog(set,v){set.has(v)?set.delete(v):set.add(v);renderChips();renderGroups();}
+function renderStrip(){$('dateStrip').innerHTML=strip.map((d,ix)=>{const sel=selDate===ix,best=d[2]===1;return `<div class="tad${sel?' sel':''}" data-ix="${ix}"><div class="d">${d[0]}.2026</div><div class="p${best?' cheap':''}">от ${fmt(d[1])} ₽</div>${best?'<div class="tag">лучшая цена</div>':sel?'<div class="tag s">выбрано</div>':''}</div>`;}).join('');$('dateStrip').querySelectorAll('.tad').forEach(el=>el.onclick=()=>{selDate=+el.dataset.ix;renderStrip();showRefresh();});}
+function showRefresh(){const b=$('refreshBanner');if(selDate===null){b.style.display='none';return;}$('refreshTxt').textContent='Вы выбрали вылет '+strip[selDate][0]+'.2026. Обновите поиск, чтобы пересчитать цены под эту дату.';b.style.display='flex';}
+function doSearch(){$('refreshBanner').style.display='none';if(selDate!==null)$('sfDate').querySelector('span').textContent=strip[selDate][0]+' июля';const g=$('groups');g.style.opacity='.4';setTimeout(()=>g.style.opacity='1',300);}
+function cell(room,dt,n,f){const m=DATA.filter(d=>d.room===room&&d.i===dt&&d.n===n&&d.f===f&&opF(d));if(!m.length)return null;return{p:Math.min(...m.map(d=>d.p)),ops:[...new Set(m.flatMap(d=>d.ops))],soldout:m.every(d=>d.soldout)};}
+function opTag(ops){const ab=ops.map(o=>ABBR[o]);let s=ab.slice(0,2).join('·');if(ab.length>2)s+=' +'+(ab.length-2);return s;}
+
+function renderGroups(){
+  const rooms=[...new Set(DATA.map(r=>r.room))].sort((a,b)=>order[a]-order[b]);
+  if(!inited){inited=true;openR.add(rooms[0]);}
+  const shownMeals=MEAL.filter(m=>!st.food.size||st.food.has(m));
+  const html=rooms.map(room=>{
+    const rr=DATA.filter(r=>r.room===room);
+    const nights=[...new Set(rr.map(r=>r.n))].sort((a,b)=>a-b);
+    const dates=[...new Set(rr.map(r=>r.i))].sort();
+    const roomMeals=MEAL.filter(m=>rr.some(r=>r.f===m)&&shownMeals.includes(m));
+    const avail=rr.filter(r=>!r.soldout&&opF(r));const rmin=avail.length?Math.min(...avail.map(r=>r.p)):null;const roomSold=rr.every(r=>r.soldout);
+    const ro=openR.has(room);const demo=rr[0].demo;
+    let bestPN=Infinity;dates.forEach(dt=>nights.forEach(n=>{const c=cell(room,dt,n,BASE);if(c&&!c.soldout)bestPN=Math.min(bestPN,Math.round(c.p/n));}));
+    const dateMin={};dates.forEach(dt=>{const a=rr.filter(r=>r.i===dt&&!r.soldout&&opF(r));dateMin[dt]=a.length?Math.min(...a.map(r=>r.p)):Infinity;});
+    const colMin=Math.min(...Object.values(dateMin));
+    let inner='';
+    if(ro){
+      const cols=`72px repeat(${dates.length},minmax(150px,1fr))`;
+      const wd=dt=>rr.find(r=>r.i===dt).wi;
+      let head=`<div class="gh-corner">Ночей \\ дата</div>`+dates.map(dt=>{const cd=dateMin[dt]===colMin&&isFinite(colMin);return `<div class="gh-date${cd?' cheap':''}"><div class="dd">${dt}</div><div class="wd">${wd(dt)}${cd?' · выгодно':''}</div></div>`;}).join('');
+      let body=nights.map(n=>{
+        const cells=dates.map(dt=>{
+          const md=roomMeals.map(m=>({m,c:cell(room,dt,n,m)}));const offered=md.filter(x=>x.c);
+          if(!offered.length)return `<div class="cell-empty">нет тура</div>`;
+          if(offered.every(x=>x.c.soldout))return `<div class="cell-sold">${SVGlock}мест нет</div>`;
+          const lines=md.map(x=>{
+            if(!x.c)return `<div class="ln"><span class="meal ${mealCls[x.m]}">${x.m}</span><span class="right pnn">—</span></div>`;
+            const c=x.c,isBase=x.m===BASE,pnv=Math.round(c.p/n),best=isBase&&pnv===bestPN&&!c.soldout;
+            if(c.soldout)return `<div class="ln so"><div><div class="meal ${mealCls[x.m]}">${x.m}</div><div class="ops">${opTag(c.ops)}</div></div><div class="right"><span class="price">${fmt(c.p)}</span><div class="pnn">мест нет</div></div></div>`;
+            const b=cell(room,dt,n,BASE);
+            const right=isBase?`<span class="pnn${best?' best':''}">${best?'✓ ':''}${fmt(pnv)} ₽/ноч</span>`:((b&&!b.soldout)?`<span class="pnn" style="color:var(--amber-d)">+${fmt(Math.round((c.p-b.p)/n))} ₽/ноч</span>`:`<span class="pnn">${fmt(pnv)} ₽/ноч</span>`);
+            return `<div class="ln${best?' best':''}"><div><div class="meal ${mealCls[x.m]}">${x.m}</div><div class="ops">${opTag(c.ops)}</div></div><div class="right"><span class="price"${best?' style="color:var(--amber-d)"':''}>${fmt(c.p)}</span><div>${right}</div></div></div>`;
+          }).join('');
+          return `<div class="cell">${lines}</div>`;
+        }).join('');
+        return `<div class="gh-nights">${n} ноч.</div>${cells}`;
+      }).join('');
+      inner=`<div class="mwrap"><div style="position:relative"><div class="scroller"><div class="grid" style="grid-template-columns:${cols};min-width:760px">${head}${body}</div></div><button class="scrollR" aria-label="Прокрутить вправо">${SVGchev.replace('class="chevr"','width="18" height="18"')}</button></div><div class="mfoot">${SVGchev.replace('class="chevr"','width="13" height="13"')} листайте вправо — ещё даты · доплаты за питание — за ночь от «${BASE}»</div></div>`;
+    }
+    const rightHd=roomSold?`<span style="color:#c0392b;font-weight:700;font-size:12px">${SVGlock} мест нет</span>`:`<span class="from">от <b>${rmin?fmt(rmin)+' ₽':'—'}</b></span>`;
+    const tag=demo?'<span class="demo">демо</span>':'';
+    const cnt=roomSold?'<span class="soldb">выкуплено</span>':`<span class="cnt">· ${roomMeals.length} тип. питания</span>`;
+    return `<div class="room${roomSold?' sold':''}"><div class="room-hd" data-room="${room}"><div class="l"><span class="chevr${ro?' open':''}">${SVGchev}</span><svg class="bed" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 8v11M3 12h18v7M21 19v-5a3 3 0 0 0-3-3H10v4"/></svg><span class="nm">${room}</span>${tag}${cnt}</div>${rightHd}</div>${inner}</div>`;
+  }).join('');
+  $('groups').innerHTML=html;
+  $('groups').querySelectorAll('.room-hd').forEach(el=>el.onclick=()=>{const r=el.dataset.room;openR.has(r)?openR.delete(r):openR.add(r);renderGroups();});
+  $('groups').querySelectorAll('.scrollR').forEach(b=>b.onclick=e=>{e.stopPropagation();b.parentElement.querySelector('.scroller').scrollBy({left:300,behavior:'smooth'});});
+}
+renderChips();renderStrip();renderGroups();
+</script>
+</body>
+</html>

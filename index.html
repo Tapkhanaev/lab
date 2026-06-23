@@ -3,105 +3,164 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Лучшие предложения — прототип блока цен (1001tur)</title>
+<title>Лучшие предложения — прототип (таблица + пошаговый выбор), 1001tur</title>
 <style>
 :root{
   --teal:#2ec4c1; --teal-d:#1f9e9b; --teal-bg:#eafaf9; --teal-shadow:#2ec4c1e6;
-  --amber:#ffb61e; --amber-d:#d9821e;
-  --ink:#2b2b2b; --muted:#8d8d8d; --muted2:#6b7280; --line:#e7e9ea; --chip:#f1f2f3;
-  --green:#2e9e6f; --radius:15px;
+  --amber:#ffb61e; --amber-d:#d9821e; --amber-bg:#fff4dc;
+  --ink:#2b2b2b; --muted:#8d8d8d; --line:#e7e9ea; --chip:#f1f2f3;
+  --green:#2e9e6f; --dark:#13302d; --radius:15px;
 }
 *{box-sizing:border-box}
-body{font-family:Arial,Helvetica,sans-serif;color:var(--ink);margin:0;padding:24px;background:#f6f8f8}
-.pm{max-width:1100px;margin:0 auto}
+body{font-family:Arial,Helvetica,sans-serif;color:var(--ink);margin:0;padding:24px 24px 24px;background:#f6f8f8}
+body.has-bar{padding-bottom:104px}
+.pm{max-width:1180px;margin:0 auto}
 .pm-note{font-size:12px;color:var(--muted);margin:0 0 16px}
+.pm-head{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;margin:0 0 4px}
+.pm-title{font-size:28px;font-weight:700;margin:0}
+.pm-sub{font-size:13px;color:var(--muted);margin:0 0 18px}
+/* view toggle */
+.toggle{display:inline-flex;background:var(--chip);border-radius:999px;padding:4px;gap:4px}
+.toggle button{border:none;background:transparent;border-radius:999px;padding:8px 16px;font-size:14px;font-weight:700;color:var(--muted);cursor:pointer;display:flex;align-items:center;gap:6px}
+.toggle button.on{background:#fff;color:var(--teal-d);box-shadow:0 1px 3px #0002}
+.toggle svg{width:15px;height:15px}
 /* search bar */
-.pm-search{display:flex;align-items:center;gap:0;background:#fff;border:1px solid var(--line);border-radius:999px;padding:6px 6px 6px 18px;margin:0 0 22px;overflow-x:auto;box-shadow:1px 1px 5px #2ec4c133}
+.pm-search{display:flex;align-items:center;background:#fff;border:1px solid var(--line);border-radius:999px;padding:6px 6px 6px 18px;margin:0 0 20px;overflow-x:auto;box-shadow:1px 1px 5px #2ec4c133}
 .pm-search .seg{display:flex;align-items:center;gap:7px;white-space:nowrap;cursor:pointer;font-size:14px;font-weight:500}
-.pm-search .seg .lbl{color:var(--muted);font-size:11px;font-weight:400}
 .pm-search .sep{width:1px;height:22px;background:var(--line);margin:0 16px;flex:0 0 auto}
 .pm-search .ic{width:16px;height:16px;color:var(--teal);flex:0 0 auto}
 .pm-search .find{margin-left:16px;background:var(--teal);color:#fff;border:none;border-radius:999px;padding:10px 20px;font-size:14px;font-weight:700;cursor:pointer;white-space:nowrap;display:flex;gap:7px;align-items:center}
-.pm-title{font-size:28px;font-weight:700;margin:0 0 8px}
-.pm-hint{font-size:12px;color:var(--muted);margin:0 0 14px}
+/* steps */
+.step-hd{display:flex;align-items:center;gap:10px;margin:20px 0 12px;flex-wrap:wrap}
+.step-no{width:26px;height:26px;border-radius:50%;background:var(--teal);color:#fff;font-weight:700;font-size:14px;display:flex;align-items:center;justify-content:center;flex:0 0 auto}
+.step-t{font-size:18px;font-weight:700}
+.step-hint{font-size:12px;color:var(--muted)}
+.pm-h2{font-size:22px;font-weight:700;margin:20px 0 14px}
 /* date strip */
 .pm-dates{display:flex;gap:10px;overflow-x:auto;padding:4px 2px 8px}
-.tad{min-width:120px;flex:0 0 auto;cursor:pointer;border:1px solid transparent;border-radius:var(--radius);padding:13px 12px;text-align:center;background:#fff;box-shadow:0 1px 5px #0003;position:relative}
+.tad{min-width:130px;flex:0 0 auto;cursor:pointer;border:2px solid transparent;border-radius:var(--radius);padding:12px;text-align:center;background:#fff;box-shadow:0 1px 5px #0003;position:relative}
 .tad.sel{border-color:var(--teal)}
-.tad .d{color:var(--muted);font-size:16px;font-weight:500}
-.tad .p{font-size:20px;font-weight:700;margin-top:4px}
-.tad .p.cheap{color:var(--amber)}
-.tad .tag{font-size:11px;color:var(--amber);margin-top:2px}
-.tad .tag.s{color:var(--teal)}
-/* refresh banner */
+.tad .d{color:var(--muted);font-size:14px;font-weight:500}
+.tad .p{font-size:19px;font-weight:700;margin-top:3px}
+.tad .p.cheap{color:var(--amber-d)}
+.tad .pn{font-size:11px;color:var(--muted);margin-top:1px}
+.tad .tag{font-size:10px;color:#fff;background:var(--amber);border-radius:6px;padding:2px 6px;margin-top:6px;display:inline-block;font-weight:700}
+.tad .tag.s{background:var(--teal)}
+/* nights cards */
+.pm-nights{display:flex;gap:10px;flex-wrap:wrap}
+.ncard{min-width:170px;cursor:pointer;border:2px solid transparent;border-radius:var(--radius);padding:12px 16px;background:#fff;box-shadow:0 1px 5px #0003}
+.ncard.sel{border-color:var(--teal)}
+.ncard .nn{font-size:17px;font-weight:700}
+.ncard .np{font-size:12px;color:var(--muted);margin-top:4px}
+.ncard .np b{color:var(--ink)}
+.ncard .tag{font-size:10px;color:var(--amber-d);background:var(--amber-bg);border-radius:6px;padding:2px 7px;font-weight:700;margin-left:6px;vertical-align:middle}
+/* refresh */
 .pm-refresh{display:none;align-items:center;justify-content:space-between;gap:12px;background:var(--teal-bg);border:1px solid var(--teal);border-radius:var(--radius);padding:10px 14px;margin:10px 0 0}
 .pm-refresh .t{font-size:13px;color:var(--teal-d)}
 .pm-refresh button{background:var(--teal);color:#fff;border:none;border-radius:999px;padding:8px 14px;font-size:13px;font-weight:700;cursor:pointer;white-space:nowrap}
-.pm-sep{border-top:1px solid var(--line);margin:18px 0 14px}
 /* filters */
-.pm-filters{display:flex;flex-wrap:wrap;gap:18px;align-items:flex-start;margin:0 0 22px}
+.pm-filters{display:flex;flex-wrap:wrap;gap:14px;align-items:flex-start;background:#fff;border-radius:var(--radius);box-shadow:0 1px 5px #0002;padding:14px 16px;margin:14px 0 4px}
 .pm-fgroup{display:flex;align-items:flex-start;gap:8px;flex-wrap:wrap}
 .pm-fgroup>.cap{font-size:13px;color:var(--muted);padding-top:9px}
 .chip{display:flex;flex-direction:column;align-items:flex-start;gap:1px;background:var(--chip);border:1px solid transparent;border-radius:25px;padding:6px 15px;font-size:14px;font-weight:500;color:#444;cursor:pointer;white-space:nowrap;line-height:1.25}
 .chip .sub{font-size:11px;font-weight:400;color:var(--muted)}
 .chip.on{background:var(--amber);color:#fff}
 .chip.on .sub{color:#fff;opacity:.9}
-.pm-hint-inline{font-size:11px;color:var(--muted);display:inline-flex;align-items:center;gap:5px;background:var(--chip);border-radius:999px;padding:5px 11px;align-self:center}
-.pm-h2{font-size:22px;font-weight:700;margin:0 0 14px}
-/* room card */
-.room{background:#fff;border-radius:var(--radius);box-shadow:1px 1px 5px var(--teal-shadow);margin:0 0 16px;overflow:hidden}
+/* rooms */
+.room{background:#fff;border-radius:var(--radius);box-shadow:1px 1px 5px var(--teal-shadow);margin:0 0 14px;overflow:hidden}
 .room.sold{opacity:.7;box-shadow:0 1px 5px #0003}
-.room-hd{display:flex;align-items:center;justify-content:space-between;padding:14px 16px;background:var(--teal-bg);cursor:pointer;gap:10px}
-.room-hd .l{display:flex;align-items:center;gap:9px;min-width:0}
+.room-hd{display:flex;align-items:center;justify-content:space-between;padding:14px 16px;cursor:pointer;gap:10px}
+.room-hd .l{display:flex;align-items:center;gap:9px;min-width:0;flex-wrap:wrap}
 .room-hd .nm{font-size:16px;font-weight:700}
 .room-hd .bed{width:21px;height:21px;color:var(--teal);flex:0 0 auto}
 .room-hd .cnt{font-size:12px;color:var(--muted)}
-.room-hd .demo{font-size:10px;padding:2px 8px;border-radius:999px;background:#fff4dc;color:var(--amber-d)}
+.room-hd .demo{font-size:10px;padding:2px 8px;border-radius:999px;background:var(--amber-bg);color:var(--amber-d)}
 .room-hd .soldb{font-size:10px;padding:2px 8px;border-radius:999px;background:#fdeaea;color:#c0392b}
-.room-hd .from{font-size:13px;color:var(--muted)}
-.room-hd .from b{color:var(--ink);font-size:15px}
+.room-hd .from{font-size:13px;color:var(--muted);white-space:nowrap}
+.room-hd .from b{color:var(--ink);font-size:17px}
 .chevr{width:14px;height:14px;color:var(--muted);transition:transform .2s;flex:0 0 auto}
 .chevr.open{transform:rotate(90deg)}
+.room-body{border-top:1px solid var(--line);padding:14px 16px}
+.room-ctx{font-size:13px;color:var(--muted);margin:0 0 12px}
+.room-ctx b{color:var(--ink)}
+/* meal cards (steps) */
+.meals{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:12px}
+.mcard{border:2px solid var(--line);border-radius:12px;padding:12px 14px 14px;position:relative;display:flex;flex-direction:column;min-height:150px}
+.mcard.best{border-color:var(--amber)}.mcard.sel{border-color:var(--teal)}.mcard.dis{opacity:.55}
+.mcard .mb{font-size:11px;font-weight:700;border-radius:7px;padding:3px 9px;align-self:flex-start;margin-bottom:8px}
+.mcard.best .mb{background:var(--amber);color:#fff}.mcard.sel .mb{background:var(--teal);color:#fff}
+.mcard .meal{font-size:15px;font-weight:700}
+.mcard .ops{font-size:11px;color:var(--muted);margin-top:1px;min-height:14px}
+.mcard .price{font-size:22px;font-weight:700;margin-top:8px}
+.mcard .price.so{text-decoration:line-through;color:var(--muted);font-size:18px}
+.mcard .pn{font-size:11px;color:var(--muted);margin-top:3px}
+.mcard .pn.delta{display:inline-block;background:var(--teal-bg);color:var(--teal-d);border-radius:6px;padding:2px 7px;font-weight:700}
+.mcard .btn{margin-top:auto;border:none;border-radius:10px;padding:10px;font-size:14px;font-weight:700;cursor:pointer;background:var(--teal);color:#fff;width:100%}
+.mcard.sel .btn{background:#fff;border:1px solid var(--teal);color:var(--teal-d)}
+.mcard .btn.soldb{background:var(--chip);color:var(--muted);cursor:not-allowed}
+.mcard .nooffer{font-size:13px;color:var(--muted);margin:auto 0}
+.room-foot{font-size:11px;color:var(--muted);margin-top:12px}
 /* matrix */
-.mwrap{padding:12px 16px 10px;position:relative}
+.mwrap{padding:12px 16px;position:relative}
 .scroller{overflow-x:auto}
 .grid{display:grid;gap:6px;align-items:stretch}
 .gh-corner{font-size:11px;color:var(--muted);padding:4px 6px;align-self:end}
 .gh-date{text-align:center;padding:5px 4px;border-radius:10px}
-.gh-date.cheap{background:#fff4dc}
+.gh-date.cheap{background:var(--amber-bg)}
 .gh-date .dd{font-size:14px;font-weight:700}
 .gh-date.cheap .dd{color:var(--amber-d)}
 .gh-date .wd{font-size:10px;color:var(--muted)}
 .gh-nights{font-size:13px;font-weight:700;padding:6px;display:flex;align-items:center}
 .cell{border:1px solid var(--line);border-radius:10px;padding:7px 9px;background:#fff}
 .cell-empty{border:1px dashed var(--line);border-radius:10px;background:transparent;display:flex;align-items:center;justify-content:center;font-size:11px;color:var(--muted);min-height:40px}
-.cell-sold{border:1px solid var(--line);border-radius:10px;background:var(--chip);display:flex;align-items:center;justify-content:center;gap:6px;font-size:12px;color:var(--muted);min-height:40px}
+.cell-sold{border:1px solid var(--line);border-radius:10px;background:var(--chip);display:flex;align-items:center;justify-content:center;font-size:12px;color:var(--muted);min-height:40px}
 .ln{display:flex;justify-content:space-between;gap:8px;align-items:flex-start}
 .ln+.ln{border-top:1px dashed var(--line);margin-top:4px;padding-top:4px}
 .ln .meal{font-size:11px;white-space:nowrap}
 .ln .ops{font-size:10px;color:var(--muted)}
 .ln .price{font-size:13px;font-weight:700}
 .ln .pnn{font-size:10px;color:var(--muted)}
-.ln .best .price,.ln .best.pnn{color:var(--amber-d)}
-.ln.so .price{text-decoration:line-through;color:var(--muted)}
-.ln.so{opacity:.65}
+.ln.so .price{text-decoration:line-through;color:var(--muted)}.ln.so{opacity:.65}
 .ln .right{text-align:right;white-space:nowrap}
-.scrollR{position:absolute;right:6px;top:54px;width:32px;height:32px;border-radius:50%;border:1px solid var(--teal);background:#fff;color:var(--teal);cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 1px 4px #0002}
-.mfoot{font-size:11px;color:var(--muted);margin-top:8px;display:flex;align-items:center;gap:6px}
-.lock{width:13px;height:13px;flex:0 0 auto}
-.lbl-base{color:var(--muted)} .lbl-bf{color:var(--teal)} .lbl-hb{color:var(--amber-d)} .lbl-ai{color:var(--green)}
+.scrollR{position:absolute;right:10px;top:54px;width:32px;height:32px;border-radius:50%;border:1px solid var(--teal);background:#fff;color:var(--teal);cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 1px 4px #0002}
+.mfoot{font-size:11px;color:var(--muted);margin-top:8px}
+/* booking bar */
+.bar{position:fixed;left:0;right:0;bottom:0;background:var(--dark);color:#fff;display:flex;align-items:center;gap:18px;padding:12px 28px;z-index:50;box-shadow:0 -2px 14px #0004}
+.bar .sel{font-size:13px;line-height:1.35}.bar .sel .cap{color:#9fd9d4}.bar .sel b{font-size:15px}
+.bar .total{font-size:23px;font-weight:700;margin-left:auto;white-space:nowrap}
+.bar .reset{background:transparent;border:1px solid #ffffff55;color:#fff;border-radius:9px;padding:10px 16px;cursor:pointer;font-size:14px}
+.bar .book{background:var(--amber);color:#3a2a00;border:none;border-radius:9px;padding:12px 20px;font-weight:700;cursor:pointer;font-size:15px;white-space:nowrap}
+.hidden{display:none!important}
+@media(max-width:768px){
+  body{padding:14px 12px}
+  body.has-bar{padding-bottom:128px}
+  .pm-title{font-size:21px}
+  .meals{grid-template-columns:1fr}
+  .pm-filters{flex-direction:column;gap:10px}
+  .tad{min-width:120px}
+  .bar{flex-wrap:wrap;gap:10px 14px;padding:10px 14px}
+  .bar .sel{flex:1 1 100%;order:1}.bar .total{order:2;margin-left:0;font-size:20px}
+  .bar .reset{order:3}.bar .book{order:4;flex:1 1 auto}
+}
 </style>
 </head>
 <body>
 <div class="pm">
-<p class="pm-note">Прототип переработанного блока цен в стилистике сайта (бирюзовый #2ec4c1, акцент #ffb61e, Arial). Deluxe — реальные данные отеля ISG Airport Hotel; Standard / Family / Superior — демо для показа разных номеров, питаний и распродажи.</p>
+<p class="pm-note">Прототип в стилистике сайта. Deluxe — реальные данные ISG Airport Hotel; Standard / Family / Superior — демо. Переключатель ниже меняет вид: «Таблица» (матрица дат×ночей) или «Пошагово».</p>
+
+<div class="pm-head">
+  <h1 class="pm-title">Лучшие предложения</h1>
+  <div class="toggle" id="toggle">
+    <button data-m="matrix"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M3 15h18M9 3v18M15 3v18"/></svg>Таблица</button>
+    <button data-m="steps"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6h10M4 12h16M4 18h7"/><circle cx="19" cy="6" r="2"/></svg>Пошагово</button>
+  </div>
+</div>
+<p class="pm-sub" id="subline"></p>
 
 <div class="pm-search">
   <div class="seg"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 19h18M5 16l5-2 4-7 3 1-2 6 4-1"/></svg><span>Москва</span></div>
   <span class="sep"></span>
   <div class="seg"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 21V5l8-2v18M12 21V8l8 2v11M4 21h16"/></svg><span>ISG Airport Hotel 4★</span></div>
-  <span class="sep"></span>
-  <div class="seg" id="sfDate"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="17" rx="2"/><path d="M3 9h18M8 2v4M16 2v4"/></svg><span>13–20 июля</span></div>
   <span class="sep"></span>
   <div class="seg"><svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 13a8 8 0 1 1-7-8 6 6 0 0 0 7 8Z"/></svg><span>9–11 ночей</span></div>
   <span class="sep"></span>
@@ -109,47 +168,56 @@ body{font-family:Arial,Helvetica,sans-serif;color:var(--ink);margin:0;padding:24
   <button class="find" onclick="doSearch()"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4-4"/></svg>Найти туры</button>
 </div>
 
-<h2 class="pm-title">Лучшие предложения</h2>
-<div class="pm-hint">Выберите дату вылета</div>
+<div id="s1"><div class="step-hd"><span class="step-no">1</span><span class="step-t">Дата вылета</span><span class="step-hint">— подсвечена самая низкая цена за ночь</span></div>
 <div class="pm-dates" id="dateStrip"></div>
-<div class="pm-refresh" id="refreshBanner"><span class="t" id="refreshTxt"></span><button onclick="doSearch()">Обновить поиск</button></div>
+<div class="pm-refresh" id="refreshBanner"><span class="t" id="refreshTxt"></span><button onclick="doSearch()">Обновить поиск</button></div></div>
 
-<div class="pm-sep"></div>
+<div id="s2"><div class="step-hd"><span class="step-no">2</span><span class="step-t">Длительность</span><span class="step-hint">— дольше тур = ниже цена за ночь</span></div>
+<div class="pm-nights" id="nightCards"></div></div>
+
 <div class="pm-filters">
   <div class="pm-fgroup"><span class="cap">Питание:</span><span id="foodChips" style="display:flex;gap:8px;flex-wrap:wrap"></span></div>
   <div class="pm-fgroup"><span class="cap">Оператор:</span><span id="opChips" style="display:flex;gap:8px;flex-wrap:wrap"></span></div>
 </div>
 
-<h2 class="pm-h2">Выберите номер</h2>
+<div id="grpHead"></div>
 <div id="groups"></div>
 </div>
+
+<div class="bar hidden" id="bar"></div>
 
 <script>
 const fmt=n=>n.toLocaleString('ru-RU');const BASE='Без питания';
 const MEAL=['Без питания','Завтрак','Полупансион','Всё включено'];
-const mealCls={'Без питания':'lbl-base','Завтрак':'lbl-bf','Полупансион':'lbl-hb','Всё включено':'lbl-ai'};
 const OPS=["Paks","OneTouch&Travel","Art-Tour"];const ABBR={'Paks':'Paks','OneTouch&Travel':'OT','Art-Tour':'AT'};
 const combos=[['Paks'],['OneTouch&Travel'],['Paks','Art-Tour'],['OneTouch&Travel','Art-Tour'],['Art-Tour']];
-const strip=[["13.07",129736,0],["14.07",88900,1],["15.07",133415,0],["16.07",121501,0],["17.07",134291,0],["18.07",110779,0],["19.07",119243,0],["20.07",110779,0]];
-const realBase=[{"i":"14.07","o":"23.07","wi":"Вт","n":9,"p":149725},{"i":"20.07","o":"29.07","wi":"Пн","n":9,"p":150059},{"i":"18.07","o":"27.07","wi":"Вс","n":9,"p":150059},{"i":"16.07","o":"25.07","wi":"Чт","n":9,"p":153563},{"i":"13.07","o":"22.07","wi":"Пн","n":9,"p":154562},{"i":"15.07","o":"24.07","wi":"Ср","n":9,"p":154562},{"i":"19.07","o":"28.07","wi":"Пн","n":9,"p":154562},{"i":"17.07","o":"26.07","wi":"Сб","n":9,"p":154614},{"i":"13.07","o":"23.07","wi":"Пн","n":10,"p":159463},{"i":"17.07","o":"27.07","wi":"Сб","n":10,"p":159520},{"i":"20.07","o":"30.07","wi":"Пн","n":10,"p":160220},{"i":"16.07","o":"26.07","wi":"Чт","n":10,"p":160220},{"i":"14.07","o":"24.07","wi":"Вт","n":10,"p":164075},{"i":"15.07","o":"25.07","wi":"Ср","n":10,"p":164299},{"i":"19.07","o":"29.07","wi":"Пн","n":10,"p":164299},{"i":"18.07","o":"28.07","wi":"Вс","n":10,"p":164776},{"i":"16.07","o":"27.07","wi":"Чт","n":11,"p":165827},{"i":"19.07","o":"30.07","wi":"Пн","n":11,"p":169681},{"i":"14.07","o":"25.07","wi":"Вт","n":11,"p":174035},{"i":"17.07","o":"28.07","wi":"Сб","n":11,"p":174035},{"i":"18.07","o":"29.07","wi":"Вс","n":11,"p":174035},{"i":"20.07","o":"31.07","wi":"Пн","n":11,"p":174937},{"i":"13.07","o":"24.07","wi":"Пн","n":11,"p":174937},{"i":"15.07","o":"26.07","wi":"Ср","n":11,"p":177466}];
+const DATES=["13.07","14.07","15.07","16.07","17.07","18.07","19.07","20.07"];
+const WD={"13.07":"Пн","14.07":"Вт","15.07":"Ср","16.07":"Чт","17.07":"Пт","18.07":"Сб","19.07":"Вс","20.07":"Пн"};
+const realBase=[{"i":"14.07","o":"23.07","n":9,"p":149725},{"i":"20.07","o":"29.07","n":9,"p":150059},{"i":"18.07","o":"27.07","n":9,"p":150059},{"i":"16.07","o":"25.07","n":9,"p":153563},{"i":"13.07","o":"22.07","n":9,"p":154562},{"i":"15.07","o":"24.07","n":9,"p":154562},{"i":"19.07","o":"28.07","n":9,"p":154562},{"i":"17.07","o":"26.07","n":9,"p":154614},{"i":"13.07","o":"23.07","n":10,"p":159463},{"i":"17.07","o":"27.07","n":10,"p":159520},{"i":"20.07","o":"30.07","n":10,"p":160220},{"i":"16.07","o":"26.07","n":10,"p":160220},{"i":"14.07","o":"24.07","n":10,"p":164075},{"i":"15.07","o":"25.07","n":10,"p":164299},{"i":"19.07","o":"29.07","n":10,"p":164299},{"i":"18.07","o":"28.07","n":10,"p":164776},{"i":"16.07","o":"27.07","n":11,"p":165827},{"i":"19.07","o":"30.07","n":11,"p":169681},{"i":"14.07","o":"25.07","n":11,"p":174035},{"i":"17.07","o":"28.07","n":11,"p":174035},{"i":"18.07","o":"29.07","n":11,"p":174035},{"i":"20.07","o":"31.07","n":11,"p":174937},{"i":"13.07","o":"24.07","n":11,"p":174937},{"i":"15.07","o":"26.07","n":11,"p":177466}];
 const bfast={"14.07|9":175723,"20.07|9":177040,"18.07|9":177040,"16.07|9":179565,"13.07|9":180560,"15.07|9":180560,"19.07|9":180560,"17.07|9":181595,"13.07|10":188349,"17.07|10":189479,"20.07|10":190180,"16.07|10":190180,"15.07|10":193186,"19.07|10":193186,"14.07|10":194034,"18.07|10":194735,"16.07|11":198764,"19.07|11":202619,"17.07|11":205810,"14.07|11":205810,"18.07|11":205810,"20.07|11":207875,"13.07|11":207875,"15.07|11":209241};
 const data=[];let idx=0;
-realBase.forEach(r=>{data.push({room:"Deluxe",f:BASE,ops:combos[idx%5],...r});const bf=bfast[r.i+'|'+r.n];if(bf)data.push({room:"Deluxe",f:"Завтрак",ops:combos[(idx+2)%5],i:r.i,o:r.o,wi:r.wi,n:r.n,p:bf});idx++;});
-function genDemo(room,delta,tiers,sold){let j=0;realBase.forEach(r=>{tiers.forEach(t=>{data.push({room,demo:1,f:t.f,ops:combos[(j+t.k)%5],i:r.i,o:r.o,wi:r.wi,n:r.n,p:r.p+delta+t.add*r.n,soldout:!!sold});});j++;});}
+realBase.forEach(r=>{data.push({room:"Deluxe",f:BASE,ops:combos[idx%5],...r});const bf=bfast[r.i+'|'+r.n];if(bf)data.push({room:"Deluxe",f:"Завтрак",ops:combos[(idx+2)%5],i:r.i,o:r.o,n:r.n,p:bf});idx++;});
+function genDemo(room,delta,tiers,sold){let j=0;realBase.forEach(r=>{tiers.forEach(t=>{data.push({room,demo:1,f:t.f,ops:combos[(j+t.k)%5],i:r.i,o:r.o,n:r.n,p:r.p+delta+t.add*r.n,soldout:!!sold});});j++;});}
 genDemo("Standard",-23000,[{f:BASE,add:0,k:0},{f:"Завтрак",add:2889,k:2},{f:"Полупансион",add:4200,k:3},{f:"Всё включено",add:6500,k:1}]);
 genDemo("Family Room",48000,[{f:BASE,add:0,k:1},{f:"Завтрак",add:2889,k:3},{f:"Всё включено",add:6800,k:2}]);
 genDemo("Superior",92000,[{f:BASE,add:0,k:0},{f:"Завтрак",add:2889,k:2},{f:"Всё включено",add:6800,k:1}],true);
-const HOLES=new Set(['Deluxe|15.07|10','Deluxe|19.07|11','Standard|16.07|10','Standard|13.07|11','Family Room|17.07|11']);
+const HOLES=new Set(['Deluxe|15.07|10','Deluxe|19.07|11','Standard|16.07|10','Family Room|17.07|11']);
 let DATA=data.filter(d=>!HOLES.has(d.room+'|'+d.i+'|'+d.n));
-const SOLD=new Set(['Deluxe|13.07|9','Deluxe|20.07|11','Standard|14.07|10']);
+const SOLD=new Set(['Deluxe|20.07|11','Standard|14.07|10']);
 DATA.forEach(d=>{if(SOLD.has(d.room+'|'+d.i+'|'+d.n))d.soldout=true;});
 const order={"Standard":0,"Deluxe":1,"Family Room":2,"Superior":3};
-const st={food:new Set(),op:new Set()};const openR=new Set();let inited=false,selDate=null;
+const mealClr={'Без питания':'#8d8d8d','Завтрак':'var(--teal)','Полупансион':'var(--amber-d)','Всё включено':'var(--green)'};
+let mode='matrix';
+const st={food:new Set(),op:new Set()};
+const sel={date:'14.07',nights:9,room:'Deluxe',meal:'Завтрак'};const openR=new Set(['Deluxe']);
 const $=id=>document.getElementById(id);
 const SVGchev='<svg class="chevr" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m9 6 6 6-6 6"/></svg>';
-const SVGlock='<svg class="lock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="11" width="16" height="9" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg>';
 
 function opF(d){return !st.op.size||d.ops.some(o=>st.op.has(o));}
+function offers(filter){return DATA.filter(d=>opF(d)&&(!st.food.size||st.food.has(d.f))&&filter(d));}
+function getOffer(room,dt,n,f){const m=DATA.filter(d=>d.room===room&&d.i===dt&&d.n===n&&d.f===f&&opF(d));if(!m.length)return null;return{p:Math.min(...m.map(d=>d.p)),ops:[...new Set(m.flatMap(d=>d.ops))],soldout:m.every(d=>d.soldout)};}
+function opTag(ops){const ab=ops.map(o=>ABBR[o]);let s=ab.slice(0,2).join('·');if(ab.length>2)s+=' +'+(ab.length-2);return s;}
+
 function chip(set,v,name,sub){const a=set.has(v);return `<button class="chip${a?' on':''}" data-v="${v}"><span>${name}</span><span class="sub">${sub}</span></button>`;}
 function renderChips(){
   const present=MEAL.filter(m=>DATA.some(d=>d.f===m));
@@ -158,61 +226,128 @@ function renderChips(){
   $('foodChips').querySelectorAll('button').forEach(b=>b.onclick=()=>tog(st.food,b.dataset.v));
   $('opChips').querySelectorAll('button').forEach(b=>b.onclick=()=>tog(st.op,b.dataset.v));
 }
-function tog(set,v){set.has(v)?set.delete(v):set.add(v);renderChips();renderGroups();}
-function renderStrip(){$('dateStrip').innerHTML=strip.map((d,ix)=>{const sel=selDate===ix,best=d[2]===1;return `<div class="tad${sel?' sel':''}" data-ix="${ix}"><div class="d">${d[0]}.2026</div><div class="p${best?' cheap':''}">от ${fmt(d[1])} ₽</div>${best?'<div class="tag">лучшая цена</div>':sel?'<div class="tag s">выбрано</div>':''}</div>`;}).join('');$('dateStrip').querySelectorAll('.tad').forEach(el=>el.onclick=()=>{selDate=+el.dataset.ix;renderStrip();showRefresh();});}
-function showRefresh(){const b=$('refreshBanner');if(selDate===null){b.style.display='none';return;}$('refreshTxt').textContent='Вы выбрали вылет '+strip[selDate][0]+'.2026. Обновите поиск, чтобы пересчитать цены под эту дату.';b.style.display='flex';}
-function doSearch(){$('refreshBanner').style.display='none';if(selDate!==null)$('sfDate').querySelector('span').textContent=strip[selDate][0]+' июля';const g=$('groups');g.style.opacity='.4';setTimeout(()=>g.style.opacity='1',300);}
-function cell(room,dt,n,f){const m=DATA.filter(d=>d.room===room&&d.i===dt&&d.n===n&&d.f===f&&opF(d));if(!m.length)return null;return{p:Math.min(...m.map(d=>d.p)),ops:[...new Set(m.flatMap(d=>d.ops))],soldout:m.every(d=>d.soldout)};}
-function opTag(ops){const ab=ops.map(o=>ABBR[o]);let s=ab.slice(0,2).join('·');if(ab.length>2)s+=' +'+(ab.length-2);return s;}
+function tog(set,v){set.has(v)?set.delete(v):set.add(v);renderAll();}
 
-function renderGroups(){
+/* ---- STEP 1 & 2 ---- */
+function renderDates(){
+  let bestPN=Infinity,bd=null;const info={};
+  DATES.forEach(dt=>{const o=offers(d=>d.i===dt&&!d.soldout);if(o.length){const p=Math.min(...o.map(x=>x.p)),pn=Math.round(Math.min(...o.map(x=>x.p/x.n)));info[dt]={p,pn};if(pn<bestPN){bestPN=pn;bd=dt;}}else info[dt]=null;});
+  $('dateStrip').innerHTML=DATES.map(dt=>{const i=info[dt];const s=sel.date===dt,best=dt===bd;
+    if(!i)return `<div class="tad" style="opacity:.5"><div class="d">${dt}.2026</div><div class="pn">нет туров</div></div>`;
+    return `<div class="tad${s?' sel':''}" data-dt="${dt}"><div class="d">${dt}.2026 · ${WD[dt]}</div><div class="p${best?' cheap':''}">от ${fmt(i.p)} ₽</div><div class="pn">${fmt(i.pn)} ₽/ночь</div>${best?'<div class="tag">ниже всего за ночь</div>':s?'<div class="tag s">выбрано</div>':''}</div>`;}).join('');
+  $('dateStrip').querySelectorAll('.tad[data-dt]').forEach(el=>el.onclick=()=>{sel.date=el.dataset.dt;syncSel();renderAll();showRefresh();});
+}
+function renderNights(){
+  let bestPN=Infinity,bn=null;const info={};
+  [9,10,11].forEach(n=>{const o=offers(d=>d.i===sel.date&&d.n===n&&!d.soldout);if(o.length){const p=Math.min(...o.map(x=>x.p)),pn=Math.round(Math.min(...o.map(x=>x.p/x.n)));info[n]={p,pn};if(pn<bestPN){bestPN=pn;bn=n;}}else info[n]=null;});
+  $('nightCards').innerHTML=[9,10,11].map(n=>{const i=info[n];const s=sel.nights===n;
+    if(!i)return `<div class="ncard" style="opacity:.5"><div class="nn">${n} ночей</div><div class="np">нет на эту дату</div></div>`;
+    return `<div class="ncard${s?' sel':''}" data-n="${n}"><div class="nn">${n} ночей${n===bn?'<span class="tag">выгодно за ночь</span>':''}</div><div class="np">от <b>${fmt(i.p)} ₽</b> · <b>${fmt(i.pn)} ₽/ночь</b></div></div>`;}).join('');
+  $('nightCards').querySelectorAll('.ncard[data-n]').forEach(el=>el.onclick=()=>{sel.nights=+el.dataset.n;syncSel();renderAll();});
+}
+
+/* ---- STEP 3: rooms as meal cards ---- */
+function renderRoomsCards(){
   const rooms=[...new Set(DATA.map(r=>r.room))].sort((a,b)=>order[a]-order[b]);
-  if(!inited){inited=true;openR.add(rooms[0]);}
   const shownMeals=MEAL.filter(m=>!st.food.size||st.food.has(m));
-  const html=rooms.map(room=>{
+  $('groups').innerHTML=rooms.map(room=>{
+    const rr=DATA.filter(r=>r.room===room);const demo=rr[0].demo;const roomSold=rr.every(r=>r.soldout);
+    const here=rr.filter(r=>r.i===sel.date&&r.n===sel.nights&&!r.soldout&&opF(r));
+    const rmin=here.length?Math.min(...here.map(r=>r.p)):null;
+    const roomMeals=MEAL.filter(m=>rr.some(r=>r.f===m)&&shownMeals.includes(m));
+    const ro=openR.has(room);let body='';
+    if(ro){
+      let bestPN=Infinity;roomMeals.forEach(m=>{const o=getOffer(room,sel.date,sel.nights,m);if(o&&!o.soldout)bestPN=Math.min(bestPN,Math.round(o.p/sel.nights));});
+      const base=getOffer(room,sel.date,sel.nights,BASE);
+      const cards=roomMeals.map(m=>{
+        const o=getOffer(room,sel.date,sel.nights,m);
+        if(!o)return `<div class="mcard dis"><div class="meal" style="color:${mealClr[m]}">${m}</div><div class="nooffer">нет на эти даты</div></div>`;
+        const isSel=sel.room===room&&sel.meal===m&&!o.soldout;const pnv=Math.round(o.p/sel.nights);const best=m===BASE&&pnv===bestPN&&!o.soldout;
+        const badge=o.soldout?'':(isSel?'<div class="mb">✓ Выбрано</div>':(best?'<div class="mb">✓ Лучшая цена за ночь</div>':''));
+        const pnLine=o.soldout?'':(m===BASE?`<div class="pn">${fmt(pnv)} ₽/ночь</div>`:((base&&!base.soldout)?`<div class="pn delta">+${fmt(Math.round((o.p-base.p)/sel.nights))} ₽/ночь</div>`:`<div class="pn">${fmt(pnv)} ₽/ночь</div>`));
+        const btn=o.soldout?'<button class="btn soldb" disabled>мест нет</button>':(isSel?'<button class="btn">✓ Выбрано</button>':`<button class="btn" data-pick="${room}|${m}">Выбрать</button>`);
+        return `<div class="mcard${isSel?' sel':best?' best':''}${o.soldout?' dis':''}">${badge}<div class="meal" style="color:${mealClr[m]}">${m}</div><div class="ops">${opTag(o.ops)}</div><div class="price${o.soldout?' so':''}">${fmt(o.p)} ₽</div>${pnLine}${btn}</div>`;
+      }).join('');
+      body=`<div class="room-body"><div class="room-ctx">Выбрано: <b>${sel.date}</b> · <b>${sel.nights} ночей</b> · цена за двоих</div><div class="meals">${cards}</div><div class="room-foot">доплаты за питание — за ночь относительно «${BASE}»</div></div>`;
+    }
+    const rightHd=roomSold?'<span style="color:#c0392b;font-weight:700;font-size:12px">мест нет</span>':`<span class="from">от <b>${rmin?fmt(rmin)+' ₽':'—'}</b></span>`;
+    const cnt=roomSold?'<span class="soldb">выкуплено</span>':`<span class="cnt">· ${roomMeals.length} тип. питания</span>`;
+    return `<div class="room${roomSold?' sold':''}"><div class="room-hd" data-room="${room}"><div class="l"><span class="chevr${ro?' open':''}">${SVGchev}</span><svg class="bed" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 8v11M3 12h18v7M21 19v-5a3 3 0 0 0-3-3H10v4"/></svg><span class="nm">${room}</span>${demo?'<span class="demo">демо</span>':''}${cnt}</div>${rightHd}</div>${body}</div>`;
+  }).join('');
+  $('groups').querySelectorAll('.room-hd').forEach(el=>el.onclick=()=>{const r=el.dataset.room;openR.has(r)?openR.delete(r):openR.add(r);renderRoomsCards();});
+  $('groups').querySelectorAll('[data-pick]').forEach(b=>b.onclick=()=>{const[r,m]=b.dataset.pick.split('|');sel.room=r;sel.meal=m;openR.add(r);renderRoomsCards();renderBar();});
+}
+
+/* ---- MATRIX ---- */
+function renderRoomsMatrix(){
+  const rooms=[...new Set(DATA.map(r=>r.room))].sort((a,b)=>order[a]-order[b]);
+  const shownMeals=MEAL.filter(m=>!st.food.size||st.food.has(m));
+  $('groups').innerHTML=rooms.map(room=>{
     const rr=DATA.filter(r=>r.room===room);
     const nights=[...new Set(rr.map(r=>r.n))].sort((a,b)=>a-b);
     const dates=[...new Set(rr.map(r=>r.i))].sort();
     const roomMeals=MEAL.filter(m=>rr.some(r=>r.f===m)&&shownMeals.includes(m));
     const avail=rr.filter(r=>!r.soldout&&opF(r));const rmin=avail.length?Math.min(...avail.map(r=>r.p)):null;const roomSold=rr.every(r=>r.soldout);
     const ro=openR.has(room);const demo=rr[0].demo;
-    let bestPN=Infinity;dates.forEach(dt=>nights.forEach(n=>{const c=cell(room,dt,n,BASE);if(c&&!c.soldout)bestPN=Math.min(bestPN,Math.round(c.p/n));}));
+    let bestPN=Infinity;dates.forEach(dt=>nights.forEach(n=>{const c=getOffer(room,dt,n,BASE);if(c&&!c.soldout)bestPN=Math.min(bestPN,Math.round(c.p/n));}));
     const dateMin={};dates.forEach(dt=>{const a=rr.filter(r=>r.i===dt&&!r.soldout&&opF(r));dateMin[dt]=a.length?Math.min(...a.map(r=>r.p)):Infinity;});
     const colMin=Math.min(...Object.values(dateMin));
     let inner='';
     if(ro){
       const cols=`72px repeat(${dates.length},minmax(150px,1fr))`;
-      const wd=dt=>rr.find(r=>r.i===dt).wi;
-      let head=`<div class="gh-corner">Ночей \\ дата</div>`+dates.map(dt=>{const cd=dateMin[dt]===colMin&&isFinite(colMin);return `<div class="gh-date${cd?' cheap':''}"><div class="dd">${dt}</div><div class="wd">${wd(dt)}${cd?' · выгодно':''}</div></div>`;}).join('');
-      let body=nights.map(n=>{
+      let head=`<div class="gh-corner">Ночей \\ дата</div>`+dates.map(dt=>{const cd=dateMin[dt]===colMin&&isFinite(colMin);return `<div class="gh-date${cd?' cheap':''}"><div class="dd">${dt}</div><div class="wd">${WD[dt]}${cd?' · выгодно':''}</div></div>`;}).join('');
+      let bdy=nights.map(n=>{
         const cells=dates.map(dt=>{
-          const md=roomMeals.map(m=>({m,c:cell(room,dt,n,m)}));const offered=md.filter(x=>x.c);
+          const md=roomMeals.map(m=>({m,c:getOffer(room,dt,n,m)}));const offered=md.filter(x=>x.c);
           if(!offered.length)return `<div class="cell-empty">нет тура</div>`;
-          if(offered.every(x=>x.c.soldout))return `<div class="cell-sold">${SVGlock}мест нет</div>`;
+          if(offered.every(x=>x.c.soldout))return `<div class="cell-sold">мест нет</div>`;
+          const base=getOffer(room,dt,n,BASE);
           const lines=md.map(x=>{
-            if(!x.c)return `<div class="ln"><span class="meal ${mealCls[x.m]}">${x.m}</span><span class="right pnn">—</span></div>`;
+            if(!x.c)return `<div class="ln"><span class="meal" style="color:${mealClr[x.m]}">${x.m}</span><span class="right pnn">—</span></div>`;
             const c=x.c,isBase=x.m===BASE,pnv=Math.round(c.p/n),best=isBase&&pnv===bestPN&&!c.soldout;
-            if(c.soldout)return `<div class="ln so"><div><div class="meal ${mealCls[x.m]}">${x.m}</div><div class="ops">${opTag(c.ops)}</div></div><div class="right"><span class="price">${fmt(c.p)}</span><div class="pnn">мест нет</div></div></div>`;
-            const b=cell(room,dt,n,BASE);
-            const right=isBase?`<span class="pnn${best?' best':''}">${best?'✓ ':''}${fmt(pnv)} ₽/ноч</span>`:((b&&!b.soldout)?`<span class="pnn" style="color:var(--amber-d)">+${fmt(Math.round((c.p-b.p)/n))} ₽/ноч</span>`:`<span class="pnn">${fmt(pnv)} ₽/ноч</span>`);
-            return `<div class="ln${best?' best':''}"><div><div class="meal ${mealCls[x.m]}">${x.m}</div><div class="ops">${opTag(c.ops)}</div></div><div class="right"><span class="price"${best?' style="color:var(--amber-d)"':''}>${fmt(c.p)}</span><div>${right}</div></div></div>`;
+            if(c.soldout)return `<div class="ln so"><div><div class="meal" style="color:${mealClr[x.m]}">${x.m}</div><div class="ops">${opTag(c.ops)}</div></div><div class="right"><span class="price">${fmt(c.p)}</span><div class="pnn">мест нет</div></div></div>`;
+            const right=isBase?`<span class="pnn"${best?' style="color:var(--amber-d);font-weight:700"':''}>${best?'✓ ':''}${fmt(pnv)} ₽/ноч</span>`:((base&&!base.soldout)?`<span class="pnn" style="color:var(--teal-d);font-weight:700">+${fmt(Math.round((c.p-base.p)/n))} ₽/ноч</span>`:`<span class="pnn">${fmt(pnv)} ₽/ноч</span>`);
+            return `<div class="ln"><div><div class="meal" style="color:${mealClr[x.m]}">${x.m}</div><div class="ops">${opTag(c.ops)}</div></div><div class="right"><span class="price"${best?' style="color:var(--amber-d)"':''}>${fmt(c.p)}</span><div>${right}</div></div></div>`;
           }).join('');
           return `<div class="cell">${lines}</div>`;
         }).join('');
         return `<div class="gh-nights">${n} ноч.</div>${cells}`;
       }).join('');
-      inner=`<div class="mwrap"><div style="position:relative"><div class="scroller"><div class="grid" style="grid-template-columns:${cols};min-width:760px">${head}${body}</div></div><button class="scrollR" aria-label="Прокрутить вправо">${SVGchev.replace('class="chevr"','width="18" height="18"')}</button></div><div class="mfoot">${SVGchev.replace('class="chevr"','width="13" height="13"')} листайте вправо — ещё даты · доплаты за питание — за ночь от «${BASE}»</div></div>`;
+      inner=`<div class="mwrap"><div style="position:relative"><div class="scroller"><div class="grid" style="grid-template-columns:${cols};min-width:760px">${head}${bdy}</div></div><button class="scrollR" aria-label="вправо">${SVGchev.replace('class="chevr"','width="18" height="18"')}</button></div><div class="mfoot">листайте вправо — ещё даты · доплаты за питание — за ночь от «${BASE}»</div></div>`;
     }
-    const rightHd=roomSold?`<span style="color:#c0392b;font-weight:700;font-size:12px">${SVGlock} мест нет</span>`:`<span class="from">от <b>${rmin?fmt(rmin)+' ₽':'—'}</b></span>`;
-    const tag=demo?'<span class="demo">демо</span>':'';
+    const rightHd=roomSold?'<span style="color:#c0392b;font-weight:700;font-size:12px">мест нет</span>':`<span class="from">от <b>${rmin?fmt(rmin)+' ₽':'—'}</b></span>`;
     const cnt=roomSold?'<span class="soldb">выкуплено</span>':`<span class="cnt">· ${roomMeals.length} тип. питания</span>`;
-    return `<div class="room${roomSold?' sold':''}"><div class="room-hd" data-room="${room}"><div class="l"><span class="chevr${ro?' open':''}">${SVGchev}</span><svg class="bed" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 8v11M3 12h18v7M21 19v-5a3 3 0 0 0-3-3H10v4"/></svg><span class="nm">${room}</span>${tag}${cnt}</div>${rightHd}</div>${inner}</div>`;
+    return `<div class="room${roomSold?' sold':''}"><div class="room-hd" data-room="${room}"><div class="l"><span class="chevr${ro?' open':''}">${SVGchev}</span><svg class="bed" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 8v11M3 12h18v7M21 19v-5a3 3 0 0 0-3-3H10v4"/></svg><span class="nm">${room}</span>${demo?'<span class="demo">демо</span>':''}${cnt}</div>${rightHd}</div>${inner}</div>`;
   }).join('');
-  $('groups').innerHTML=html;
-  $('groups').querySelectorAll('.room-hd').forEach(el=>el.onclick=()=>{const r=el.dataset.room;openR.has(r)?openR.delete(r):openR.add(r);renderGroups();});
+  $('groups').querySelectorAll('.room-hd').forEach(el=>el.onclick=()=>{const r=el.dataset.room;openR.has(r)?openR.delete(r):openR.add(r);renderRoomsMatrix();});
   $('groups').querySelectorAll('.scrollR').forEach(b=>b.onclick=e=>{e.stopPropagation();b.parentElement.querySelector('.scroller').scrollBy({left:300,behavior:'smooth'});});
 }
-renderChips();renderStrip();renderGroups();
+
+function syncSel(){const o=getOffer(sel.room,sel.date,sel.nights,sel.meal);if(!o||o.soldout){const rr=DATA.filter(d=>d.room===sel.room&&d.i===sel.date&&d.n===sel.nights&&!d.soldout&&opF(d));sel.meal=rr.length?rr.sort((a,b)=>a.p-b.p)[0].f:null;}}
+function renderBar(){
+  if(mode!=='steps'){$('bar').classList.add('hidden');return;}
+  $('bar').classList.remove('hidden');
+  const o=sel.meal?getOffer(sel.room,sel.date,sel.nights,sel.meal):null;
+  if(!o||o.soldout){$('bar').innerHTML=`<div class="sel"><span class="cap">Ваш выбор</span><br><b>Выберите вариант питания выше</b></div><div class="total">—</div><button class="reset" onclick="resetSel()">Сбросить</button><button class="book" disabled style="opacity:.5">Забронировать →</button>`;return;}
+  $('bar').innerHTML=`<div class="sel"><span class="cap">Ваш выбор</span><br><b>${sel.room} · ${sel.meal} · ${sel.date} · ${sel.nights} ночей</b></div><div class="total">${fmt(o.p)} ₽</div><button class="reset" onclick="resetSel()">Сбросить</button><button class="book">Забронировать →</button>`;
+}
+function resetSel(){sel.meal=null;renderRoomsCards();renderBar();}
+function showRefresh(){const b=$('refreshBanner');$('refreshTxt').textContent='Вы сменили дату вылета на '+sel.date+'.2026. На боевом сайте здесь обновится поиск под новую дату.';b.style.display='flex';clearTimeout(window._rt);window._rt=setTimeout(()=>{b.style.display='none';},3500);}
+function doSearch(){$('refreshBanner').style.display='none';}
+
+function applyMode(){
+  $('toggle').querySelectorAll('button').forEach(b=>b.classList.toggle('on',b.dataset.m===mode));
+  const steps=mode==='steps';
+  $('s1').classList.toggle('hidden',!steps);
+  $('s2').classList.toggle('hidden',!steps);
+  document.body.classList.toggle('has-bar',steps);
+  $('subline').textContent=steps?'Три шага: дата → длительность → номер и питание. Цена за ночь подскажет, что выгоднее.':'Сравните цены по датам и длительности в таблице. Под ценой — стоимость за ночь и доплата за питание.';
+  $('grpHead').innerHTML=steps?'<div class="step-hd"><span class="step-no">3</span><span class="step-t">Номер и питание</span></div>':'<h2 class="pm-h2">Выберите номер</h2>';
+}
+function renderGroups(){mode==='steps'?renderRoomsCards():renderRoomsMatrix();}
+function renderAll(){applyMode();renderChips();renderDates();renderNights();renderGroups();renderBar();}
+$('toggle').querySelectorAll('button').forEach(b=>b.onclick=()=>{mode=b.dataset.m;if(mode==='steps')syncSel();renderAll();window.scrollTo({top:0,behavior:'smooth'});});
+renderAll();
 </script>
 </body>
 </html>
